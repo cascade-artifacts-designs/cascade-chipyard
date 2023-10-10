@@ -1,0 +1,61 @@
+CAPI=2:
+# Copyright 2022 Flavien Solt, ETH Zurich.
+# Licensed under the General Public License, Version 3.0, see LICENSE for details.
+# SPDX-License-Identifier: GPL-3.0-only
+name: "::run_drfuzz_notrace:0.1"
+description: "Run on vanilla but with active rfuzz support"
+
+filesets:
+  files_cells:
+    files:
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/src/sram_mem.sv
+      - src/top_tiny_soc_drfuzz.sv
+      - generated/out/drfuzz.sv
+    file_type: systemVerilogSource
+
+  files_dv:
+    files:
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/elf.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/elfloader.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/common_functions.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/ticks.h : {is_include_file: true}
+      - dv/drfuzz/macros.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/afl.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/corpus.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/corpus.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/dtypes.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/dtypes.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/mutator.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/mutator.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/queue.cc
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/queue.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/server.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/testbench.cc
+      - dv/drfuzz/testbench.h : {is_include_file: true}
+      - $CASCADE_DESIGN_PROCESSING_ROOT/common/dv/drfuzz/toplevel.cc
+    file_type: cppSource
+
+targets:
+  default:
+    default_tool: verilator
+    filesets:
+      - files_cells
+      - files_dv
+    toplevel: top_tiny_soc
+    tools:
+      verilator:
+        mode: cc
+        verilator_options:
+          - '-CFLAGS "-std=c++11 -Wall -DIS_VANILLA -DSYNTHESIS -DTOPLEVEL_NAME=top_tiny_soc -g -I$(RISCV)/include -O0"'
+          - '-DSTOP_COND=0'
+          - '-LDFLAGS "-pthread -lutil"'
+          - "-Wall"
+          - "-Wno-PINCONNECTEMPTY"
+          - "-Wno-fatal"
+          - "-Wno-BLKANDNBLK"
+          - "-Wno-REDEFMACRO"
+          - "-Wno-PINMISSING"
+          - "-Wno-DECLFILENAME"
+          - "-Wno-TIMESCALEMOD"
+          - "-Wno-VARHIDDEN"
+          - "-Wno-EOFNEWLINE"

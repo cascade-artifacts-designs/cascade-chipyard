@@ -1,0 +1,14 @@
+__pycache__
+build/
+generated/
+logs
+fusesoc.conf
+traces
+saves
+statistics
+result.txt
+/modelsim
+project/
+sw/
+.core
+test

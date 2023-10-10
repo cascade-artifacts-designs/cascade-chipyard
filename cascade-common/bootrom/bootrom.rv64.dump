@@ -1,0 +1,30 @@
+
+bootrom.rv64.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .data_padding:
+
+0000000000010000 <.data_padding>:
+	...
+
+Disassembly of section .text.start:
+
+0000000000010040 <_start>:
+   10040:	7c105073          	csrwi	0x7c1,0
+   10044:	7fff0417          	auipc	s0,0x7fff0
+   10048:	fbc40413          	addi	s0,s0,-68 # 80000000 <DRAM_BASE>
+   1004c:	f1402573          	csrr	a0,mhartid
+   10050:	00000597          	auipc	a1,0x0
+   10054:	03058593          	addi	a1,a1,48 # 10080 <_dtb>
+   10058:	00040067          	jr	s0
+
+Disassembly of section .text.hang:
+
+000000000001005c <_hang>:
+   1005c:	7c105073          	csrwi	0x7c1,0
+   10060:	f1402573          	csrr	a0,mhartid
+   10064:	00000597          	auipc	a1,0x0
+   10068:	01c58593          	addi	a1,a1,28 # 10080 <_dtb>
+   1006c:	30405073          	csrwi	mie,0
+   10070:	10500073          	wfi
+   10074:	ffdff06f          	j	10070 <_hang+0x14>
