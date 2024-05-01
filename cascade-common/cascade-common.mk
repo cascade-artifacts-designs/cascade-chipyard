@@ -76,6 +76,12 @@ generated/out/drfuzz.sv: $(CASCADE_YS)/drfuzz.ys.tcl generated/out/vanilla.sv | 
 CORE_FILES_NOTRACE=$(patsubst %,run_%_notrace.core, $(TARGET_NAMES))
 $(CORE_FILES_NOTRACE): run_%.core: run_%.core.template
 	$(PYTHON) $(CASCADE_PYTHON_COMMON)/gen_corefiles.py $< $@
+CORE_FILES_TRACE=$(patsubst %,run_%_trace.core, $(TARGET_NAMES))
+$(CORE_FILES_TRACE): run_%.core: run_%.core.template
+	$(PYTHON) $(CASCADE_PYTHON_COMMON)/gen_corefiles.py $< $@
+CORE_FILES_TRACE_FST=$(patsubst %,run_%_trace_fst.core, $(TARGET_NAMES))
+$(CORE_FILES_TRACE_FST): run_%.core: run_%.core.template
+	$(PYTHON) $(CASCADE_PYTHON_COMMON)/gen_corefiles.py $< $@
 
 #
 # 2. Replace the bootrom in Vanilla to have a dynamic ELF load.
