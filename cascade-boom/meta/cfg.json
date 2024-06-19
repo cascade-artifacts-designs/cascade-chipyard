@@ -9,7 +9,7 @@
     "regdumpaddr": "0x60000010",
     "fpregdumpaddr": "0x60000018",
     "bootrom_elf": "bootrom/bootrom.rv64.elf",
-    "lead_cycles": 0,
+    "lead_cycles": 1000,
     "toplevel": "top_tiny_soc",
     "trace_top": "top_tiny_soc.i_mem_top",
     "verilatorprefix": "boom",
